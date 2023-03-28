@@ -29,6 +29,7 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = []
 
 
@@ -45,9 +46,14 @@ DJANGO_APPS = [
     # 'api'
 ]
 
-LOCAL_APPS = ['book', 'api']
+LOCAL_APPS = [
+    'book', 'api'
+]
 
-THIRD_PARTY = ['rest_framework', 'debug_toolbar']
+
+THIRD_PARTY = [
+    'rest_framework', 'debug_toolbar', 'djoser'
+]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY
 
@@ -148,4 +154,19 @@ AUTH_USER_MODEL = 'book.LibraryUser'
 
 REST_FRAMEWORK = {
     'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+DJOSER = {
+    'SERIALIZERS': {
+        'user_create': 'api.serializers.UserCreate'
+    }
 }

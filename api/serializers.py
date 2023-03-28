@@ -1,4 +1,6 @@
 from rest_framework import serializers
+from djoser.serializers import UserCreateSerializer as UserCreateSerializer
+
 from book.models import *
 
 
@@ -10,16 +12,22 @@ class AuthorSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.ModelSerializer):
     # todo relationship
-    author = AuthorSerializer()
+    # author = AuthorSerializer()
 
     class Meta:
         model = Book
-        fields = ['title', 'description', 'author', 'discount_price']
+        fields = ['title', 'description', 'date_added', 'author', 'discount_price']
 
-        discount_price = serializers.SerializerMethodField(method_name='discount')
+    author = serializers.HyperlinkedRelatedField(
+        queryset=Author.objects.all(),
+        view_name='author-detail'
+    )
 
-        def discount(self, book: Book):
-            return (book.price * 25) / 100
+    date_added = serializers.DateTimeField(read_only=True)
+    discount_price = serializers.SerializerMethodField(method_name='discount')
+
+    def discount(self, book: Book):
+        return (book.price * 25) / 100
 
     # todo the below syntax will show the author id
     # author = AuthorSerializer
@@ -37,6 +45,12 @@ class BookDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
         fields = ['title', 'isbn', 'description', 'price']
+
+
+class UserCreate(UserCreateSerializer):
+    class Meta(UserCreateSerializer.Meta):
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password']
+
 
 # # todo is used when you wanted to add something that are not inside your model
 # class AuthorSerializer(serializers.Serializer):
