@@ -60,23 +60,6 @@ class Book(models.Model):
         return self.title
 
 
-# class Genre(models.Model):
-#
-#     ]
-#     name = models.CharField(max_length=10, choices=GENRE_CHOICES, default='com')
-#
-#     def __str__(self):
-#         return self.name
-
-
-# class Language(models.Model):
-#
-#     name = models.CharField(max_length=10, choices=LANGUAGE_CHOICES, default='eng')
-#
-#     def __str__(self):
-#         return self.name
-
-
 class BookInstance(models.Model):
     STATUS_CHOICE = [
         ('AVAILABLE', 'A'),
